@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+	<title>Log in</title>
+	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4 mx-auto">
+				<div class="alert alert-danger" th:if="${param.error}">
+					Invalid username and password.
+				</div>
+				<form th:action="@{/login}" method="post">
+					<h1>Log in</h1>
+					<div><label> User Name : <input type="text" name="username" class="form-control" /> </label></div>
+					<div><label> Password: <input type="password" name="password" class="form-control" /> </label></div>
+					<div>
+						<a href="/playerlist" class="btn btn-danger">Cancel</a>
+						<input type="submit" value="Sign In" class="btn btn-primary" /><br />
+					</div>
+				</form>
+				<a th:href="@{/signup}">Don't have account?<br />Sign-up</a>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

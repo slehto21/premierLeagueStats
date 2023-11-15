@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+	<title>Football Statistics</title>
+	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+	<style>
+        h1 {
+			padding: 20px;
+            color: #007bff;
+        }
+
+        form {
+            max-width: 400px;
+            margin: auto;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-danger {
+			width: 100%;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand">Football Statistics</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+			aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" href="/playerlist">Players</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/teamlist">Teams</a>
+				</li>
+				<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+					<a class="nav-link" href="/addteam">Add Team</a>
+				</li>
+				<li class="nav-item active" sec:authorize="hasAuthority('ADMIN')">
+					<a class="nav-link" href="/addplayer">Add Player</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item" sec:authorize="isAnonymous()">
+					<a th:href="@{/login}" class="btn btn-sm mx-2">Log in</a>
+				</li>
+				<li class="nav-item" sec:authorize="isAnonymous()">
+					<a th:href="@{/signup}" class="btn btn-sm mx-2">Sign-up</a>
+				</li>
+				<li class="nav-item" sec:authorize="isAuthenticated()">
+					<a><span class="mr-2" sec:authentication="name"></span></a>
+				</li>
+				<li class="nav-item" sec:authorize="isAuthenticated()">
+					<form th:action="@{/logout}" method="post" class="form-inline my-2 my-lg-0">
+						<input type="submit" value="Sign Out" class="btn btn-sm btn-danger" />
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<h1>Add new player</h1>
+	<form action="#" th:action="@{/saveplayer}" th:object="${player}" method="post">
+		<label for="firstName">First Name:</label>
+		<input type="text" id="firstName" th:field="*{firstName}" />
+		<td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name error message</td><br/>
+
+		<label for="lastName">Last Name:</label>
+		<input type="text" id="lastName" th:field="*{lastName}"/>
+		<span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span><br/>
+
+		<label for="position">Position:</label>
+		<select id="position" th:field="*{position}">
+			<option value="GK">Goalkeeper (GK)</option>
+			<option value="DEF">Defender (DEF)</option>
+			<option value="MID">Midfielder (MID)</option>
+			<option value="ATT">Attacker (ATT)</option>
+		</select><br/>
+
+		<label for="bDay">Birth Date:</label>
+		<input type="date" id="bDay"  th:field="*{bDay}"/>
+		<span th:if="${#fields.hasErrors('bDay')}" th:errors="*{bDay}"></span><br/>
+
+		<label for="goals">Goals:</label>
+		<input type="number" id="goals" th:field="*{playerStats.goals}"/>
+		<span th:if="${#fields.hasErrors('playerStats.goals')}" th:errors="*{playerStats.goals}"></span><br/>
+
+		<label for="assists">Assists:</label>
+		<input type="number" id="assists" th:field="*{playerStats.assists}"/>
+		<span th:if="${#fields.hasErrors('playerStats.assists')}" th:errors="*{playerStats.assists}"></span><br />
+
+		<label for="matches">Matches:</label>
+		<input type="number" id="matches" th:field="*{playerStats.matches}"/>
+		<span th:if="${#fields.hasErrors('playerStats.matches')}" th:errors="*{playerStats.matches}"></span><br/>
+		
+
+		<label for="team">Team:</label>
+		<select id="team" th:field="*{team}">
+			<option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}"></option>
+		</select><br/>
+		<input type="submit" value="Add Player" class="btn btn-success"/><br/>
+		<a href="/playerlist" class="btn btn-danger">Cancel</a> 
+	</form>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Error</title>
+	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+	<style>
+		.center-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 80vh;
+		}
+	</style>
+</head>
+
+<body class="bg-light">
+	<div class="center-container">
+		<div class="text-center">
+			<h2>No page found, return to front page!</h2>
+			<a th:href="@{/playerlist}" class="btn btn-primary mt-3">Return to front page</a>
+		</div>
+	</div>
+</body>
+
+</html>
