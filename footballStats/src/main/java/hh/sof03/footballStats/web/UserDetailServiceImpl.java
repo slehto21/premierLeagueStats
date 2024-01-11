@@ -12,9 +12,7 @@ import hh.sof03.footballStats.domain.UserRepository;
 
 
 
-/**
- * This class is used by spring security to authenticate and authorize user
- **/
+// This class is used by spring security to authenticate and authorize user
 @Service
 public class UserDetailServiceImpl implements UserDetailsService  {
 	private final UserRepository userRepository;
@@ -30,6 +28,6 @@ public class UserDetailServiceImpl implements UserDetailsService  {
     	User curruser = userRepository.findByUsername(username);
         UserDetails user = new org.springframework.security.core.userdetails.User(username, curruser.getPasswordHash(), 
         		AuthorityUtils.createAuthorityList(curruser.getRole()));
-        return user; // Springin ymmärtävä UserDetails-luokan olio
+        return user; // UserDetails object
     }   
 } 

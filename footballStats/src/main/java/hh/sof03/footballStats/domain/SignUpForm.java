@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 public class SignUpForm {
+	
     @NotEmpty
     @Size(min=5, max=30, message="Username size must be between 5-30")
     private String username;

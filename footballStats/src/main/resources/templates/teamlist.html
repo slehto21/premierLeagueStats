@@ -9,18 +9,18 @@
 
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand">Football Statistics</a>
+		<a class="navbar-brand">Premier League</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
 			aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
-				<li class="nav-item">
-					<a class="nav-link" href="/playerlist">Players</a>
-				</li>
 				<li class="nav-item active">
 					<a class="nav-link" href="/teamlist">Teams</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/playerlist">Players</a>
 				</li>
 				<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
 					<a class="nav-link" href="/addteam">Add Team</a>
@@ -47,32 +47,62 @@
 			</ul>
 		</div>
 	</nav>
+	
+	<div th:if="${param.logout}" class="alert alert-success" role="alert">
+		Signed out successfully
+	</div>
 
 	<div class="container mt-3">
 		<h1>Teams</h1>
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Team</th>
 					<th>
-						<a th:href="@{/teamlist/wins}" style="color: black;">Wins</a>
+					<a th:href="@{/teamlist(rank=${rank == 'asc' ? 'desc' : 'asc'})}" style="color: black;">#</a>
 					</th>
 					<th>
-						<a th:href="@{/teamlist/losses}" style="color: black;">Losses</a>
+					<a th:href="@{/teamlist/name(order=${order == 'asc' ? 'desc' : 'asc'})}" style="color: black;">Team</a>
 					</th>
 					<th>
-						<a th:href="@{/teamlist/draws}" style="color: black;">draws</a>
+						<a th:href="@{/teamlist/wins(order=${order == 'asc' ? 'desc' : 'asc'})}" style="color: black;">W</a>
+					</th>
+					<th>
+						<a th:href="@{/teamlist/draws(order=${order == 'asc' ? 'desc' : 'asc'})}" style="color: black;">D</a>
+					</th>
+					<th>
+						<a th:href="@{/teamlist/losses(order=${order == 'asc' ? 'desc' : 'asc'})}" style="color: black;">L</a>
+					</th>
+					<th>
+						<a th:href="@{/teamlist/goalsfor(order=${order == 'asc' ? 'desc' : 'asc'})}" style="color: black;">GF</a>
+					</th>
+					<th>
+						<a th:href="@{/teamlist/goalsagainst(order=${order == 'asc' ? 'desc' : 'asc'})}" style="color: black;">GA</a>
+					</th>
+					<th>
+						<a th:href="@{/teamlist/goaldiff(order=${order == 'asc' ? 'desc' : 'asc'})}" style="color: black;">GD</a>
+					</th>
+					<th>
+						<a th:href="@{/teamlist/points(order=${order == 'asc' ? 'desc' : 'asc'})}" style="color: black;">P</a>
+					</th>
+					<th>
+						<a th:href="@{/teamlist/form(order=${order == 'asc' ? 'desc' : 'asc'})}" style="color: black;">Form</a>
 					</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="team : ${teams}">
+					<td th:text="${team.teamStats != null ? team.teamStats.rank :''}"></td>
 					<td>
 						<a th:href="@{/showteam/{id}(id=${team.id})}" th:text="${team.name}" style="color: black;"></a>
 					</td>
 					<td th:text="${team.teamStats != null ? team.teamStats.wins :''}"></td>
-					<td th:text="${team.teamStats != null ? team.teamStats.losses :''}"></td>
 					<td th:text="${team.teamStats != null ? team.teamStats.draws :''}"></td>
+					<td th:text="${team.teamStats != null ? team.teamStats.losses :''}"></td>
+					<td th:text="${team.teamStats != null ? team.teamStats.goalsFor :''}"></td>
+					<td th:text="${team.teamStats != null ? team.teamStats.goalsAgainst :''}"></td>
+					<td th:text="${team.teamStats != null ? team.teamStats.goalDiff :''}"></td>
+					<td th:text="${team.teamStats != null ? team.teamStats.points :''}"></td>
+					<td th:text="${team.teamStats != null ? team.teamStats.form :''}"></td>
 					<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/deleteteam/{id} (id=${team.id})}"
 							class="btn btn-danger">Delete</a></td>
 					<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/editteam/{id} (id=${team.id})}"

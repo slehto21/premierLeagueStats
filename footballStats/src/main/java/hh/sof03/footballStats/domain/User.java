@@ -1,5 +1,7 @@
 package hh.sof03.footballStats.domain;
 
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity(name="users")
+@RepositoryRestResource(exported = false)
 public class User {
 	
 	@Id

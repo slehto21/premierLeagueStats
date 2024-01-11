@@ -43,10 +43,10 @@
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" href="/playerlist">Players</a>
+					<a class="nav-link" href="/teamlist">Teams</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/teamlist">Teams</a>
+					<a class="nav-link" href="/playerlist">Players</a>
 				</li>
 				<li class="nav-item active" sec:authorize="hasAuthority('ADMIN')">
 					<a class="nav-link" href="/addteam">Add Team</a>
@@ -75,6 +75,7 @@
 	</nav>
 		<h1>Add new team</h1>
 		<form action="#" th:action="@{/saveteam}" th:object="${team}" method="post">
+		
 		<label for="teamName">Team name:</label>
 		<input type="text" id="teamName" th:field="*{name}"/>
 		<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span><br/>
@@ -83,21 +84,57 @@
 		<input type="text" id="city" th:field="*{city}"/>
 		<span th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span><br/>
 		
+		<label for="stadium">Stadium:</label>
+		<input type="text" id="stadium" th:field="*{stadium}"/>
+		<span th:if="${#fields.hasErrors('stadium')}" th:errors="*{stadium}"></span><br/>
+		
+		<label for="capacity">Stadium Capacity:</label>
+		<input type="number" id="capacity" th:field="*{capacity}"/>
+		<span th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></span><br/>
+		
 		<label for="year">Founding year:</label>
 		<input type="number" id="year" th:field="*{yearFounded}"/>
 		<span th:if="${#fields.hasErrors('yearFounded')}" th:errors="*{yearFounded}"></span><br/>
+		
+		<label for="logoUrl">Picture URL:</label>
+		<input type="text" id="logoUrl" th:field="*{logoUrl}"/>
 		
 		<label for="wins">Wins:</label>
 		<input type="number" id="wins" th:field="*{teamStats.wins}" name="teamStats.wins"/>
 		<span th:if="${#fields.hasErrors('teamStats.wins')}" th:errors="*{teamStats.wins}"></span><br/>
 		
+		<label for="draws">Draws:</label>
+		<input type="number" id="draws" th:field="*{teamStats.draws}" name="teamStats.draws"/>
+		<span th:if="${#fields.hasErrors('teamStats.draws')}" th:errors="*{teamStats.draws}"></span><br/>
+		
 		<label for="losses">Losses:</label>
 		<input type="number" id="losses" th:field="*{teamStats.losses}" name="teamStats.losses"/>
 		<span th:if="${#fields.hasErrors('teamStats.losses')}" th:errors="*{teamStats.losses}"></span><br/>
 		
-		<label for="draws">Draws:</label>
-		<input type="number" id="draws" th:field="*{teamStats.draws}" name="teamStats.draws"/>
-		<span th:if="${#fields.hasErrors('teamStats.draws')}" th:errors="*{teamStats.draws}"></span><br/>
+		<label for="points">Points:</label>
+		<input type="number" id="points" th:field="*{teamStats.points}" name="teamStats.points"/>
+		<span th:if="${#fields.hasErrors('teamStats.points')}" th:errors="*{teamStats.points}"></span><br/>
+		
+		<label for="rank">Rank:</label>
+		<input type="number" id="rank" th:field="*{teamStats.rank}" name="teamStats.rank"/>
+		<span th:if="${#fields.hasErrors('teamStats.rank')}" th:errors="*{teamStats.rank}"></span><br/>
+		
+		<label for="goalsFor">Goals For:</label>
+		<input type="number" id="goalsFor" th:field="*{teamStats.goalsFor}" name="teamStats.goalsFor"/>
+		<span th:if="${#fields.hasErrors('teamStats.goalsFor')}" th:errors="*{teamStats.goalsFor}"></span><br/>
+		
+		<label for="goalsAgainst">Goals Against:</label>
+		<input type="number" id="goalsAgainst" th:field="*{teamStats.goalsAgainst}" name="teamStats.goalsAgainst"/>
+		<span th:if="${#fields.hasErrors('teamStats.goalsAgainst')}" th:errors="*{teamStats.goalsAgainst}"></span><br/>
+		
+		<label for="goalDiff">Goal Difference:</label>
+		<input type="number" id="goalDiff" th:field="*{teamStats.goalDiff}" name="teamStats.goalDiff"/>
+		<span th:if="${#fields.hasErrors('teamStats.goalDiff')}" th:errors="*{teamStats.goalDiff}"></span><br/>
+		
+		<label for="form">Form:</label>
+		<input type="text" id="form" th:field="*{teamStats.form}" name="teamStats.form"/>
+		<span th:if="${#fields.hasErrors('teamStats.form')}" th:errors="*{teamStats.form}"></span><br/>
+				
 		
 		<input type="submit" value="Add Team" class="btn btn-success"/><br/>
         <a href="/teamlist" class="btn btn-danger">Go back</a>

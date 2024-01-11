@@ -31,12 +31,11 @@ public class UserController {
 		return "signup";
 	}
 
-	// Käyttäjän tallentaminen
+	// Saving new user
 	@PostMapping("/saveuser")
 	public String saveUser(@Valid @ModelAttribute("signUpForm") SignUpForm signUpForm, BindingResult bindingResult) {
-		if (!bindingResult.hasErrors()) {// Validation errors
-			if (signUpForm.getPassword().equals(signUpForm.getPasswordCheck())) { // Vastaavatko annetut salasanat
-																					// toisiaan
+		if (!bindingResult.hasErrors()) {
+			if (signUpForm.getPassword().equals(signUpForm.getPasswordCheck())) { //Password check
 				String pwd = signUpForm.getPassword();
 				BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
 				String hashPwd = bc.encode(pwd);
@@ -46,7 +45,7 @@ public class UserController {
 				newUser.setEmail(signUpForm.getEmail());
 				newUser.setUsername(signUpForm.getUsername());
 				newUser.setRole(signUpForm.getRole());
-				if (userRepository.findByUsername(signUpForm.getUsername()) == null) { // Onko käyttäjä jo olemassa
+				if (userRepository.findByUsername(signUpForm.getUsername()) == null) { //Check whether user already exists
 					userRepository.save(newUser);
 				} else {
 					bindingResult.rejectValue("username", "err.username", "Username already exists");

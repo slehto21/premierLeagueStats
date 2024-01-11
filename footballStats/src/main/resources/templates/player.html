@@ -2,31 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head>
-	<title>Football Statistics</title>
+	<title>Premier League</title>
 	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
 	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
 	<style>
-		#mydiv {
-			padding-right: 10%;
-			padding-left: 5%;
-			padding-top: 2%;
-		}
+        #mydiv {
+            padding-right: 10%;
+            padding-left: 5%;
+            padding-top: 2%;
+        }
 
-		label {
-			font-weight: bold;
-			margin-top: 10px;
-		}
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
 
-		input,
-		select {
-			width: 100%;
-			margin-bottom: 10px;
-		}
+        input,
+        select {
+            width: 100%;
+            margin-bottom: 10px;
+        }
 
-		.btn-danger {
-			margin-right: 10px;
-		}
-	</style>
+        .btn-danger {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -39,10 +39,10 @@
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" href="/playerlist">Players</a>
+					<a class="nav-link" href="/teamlist">Teams</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/teamlist">Teams</a>
+					<a class="nav-link" href="/playerlist">Players</a>
 				</li>
 				<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
 					<a class="nav-link" href="/addteam">Add Team</a>
@@ -69,41 +69,76 @@
 			</ul>
 		</div>
 	</nav>
-	<div id="mydiv">
-		<h1 th:text="${player.firstName} + ' ' + ${player.lastName}"></h1>
-
-		<div th:if="${player.team != null && player.team.name != 'No Team'}">
-			<a th:href="@{/showteam/{id}(id=${player.team.id})}" style="color: black;">
-				<h2 th:text="${player.team.name}" style="color: black;"></h2>
-			</a>
-		</div>
-
-		<div th:if="${player.team == null || player.team.name == 'No Team'}">
-			<h2 th:text="${player.team.name}" style="color: black;"></h2>
-		</div>
+	<div id="mydiv" class="row">
+	 <div class="col-md-2">
+		<img th:src="${player.playerPhoto}" style="width:150px;height:150px;">
+	 </div>
+	 <div class="col-md-4">
+		<h2>
+			<span th:text="${player.name}"></span>
+			<span th:text="'(' + ${player.firstName} + ' ' + ${player.lastName} + ')'" style="font-weight: normal; font-size: 65%;"></span>
+		</h2>
+		<h4>
+			<span th:text="${player.position}"></span>
+			<span style="font-weight: normal;">
+        		(<a th:href="@{/showteam/{id}(id=${player.team.id})}" style="color: black;">
+            		<span th:text="${player.team.name}"></span>
+      			</a>)
+   			</span>
+   		</h4>
+   		<h4>
+    		<span th:text="'Age: ' + ${player.age}"></span>
+    		<span th:text="' (' + ${#temporals.format(player.bDay, 'dd.MM.yyyy')} + ')'" style="font-weight: normal; font-size: 85%;"></span>
+    	</h4>	
+    	</div>
+    	<div class="col-md-3">
+    	<h4>
+    		<span th:text="'Nationality: '"></span>
+    		<span th:text="${player.nationality}" style="font-weight: normal;"></span>
+    	</h4>
+    
+    	<h4>
+    		<span th:text="'Height: '"></span>
+    		<span th:text="${player.height}" style="font-weight: normal;"></span>
+    	</h4>
+    	<h4>
+    		<span th:text="'Weight: '"></span>
+    		<span th:text="${player.weight}" style="font-weight: normal;"></span>
+    	</h4>
+    	</div>
 
 		<table class="table table-striped">
 			<tbody>
 				<tr>
-					<th>Matches</th>
 					<th>Goals</th>
 					<th>Assists</th>
-					<th>Position</th>
-					<th>Date of birth</th>
+					<th>Yellows</th>
+					<th>Reds</th>
+					<th>Matches</th>
+					<th>Mins</th>
+					<th>Rating</th>
+					<th>Shots</th>
+					<th>Shots On Target</th>
+					<th>Saves</th>
 				</tr>
 				<tr>
-					<td th:text="${player.playerStats != null ? player.playerStats.matches :''}"></td>
 					<td th:text="${player.playerStats != null ? player.playerStats.goals :''}"></td>
 					<td th:text="${player.playerStats != null ? player.playerStats.assists :''}"></td>
-					<td th:text="${player.position}"></td>
-					<td>
-						<span th:text="${#dates.format(player.bDay, 'dd.MM.yyyy')}"></span>
-					</td>
+					<td th:text="${player.playerStats != null ? player.playerStats.yellows :''}"></td>
+					<td th:text="${player.playerStats != null ? player.playerStats.reds :''}"></td>
+					<td th:text="${player.playerStats != null ? player.playerStats.matches :''}"></td>
+					<td th:text="${player.playerStats != null ? player.playerStats.minutes :''}"></td>
+					<td th:text="${player.playerStats != null ? player.playerStats.rating :''}"></td>
+					<td th:text="${player.playerStats != null ? player.playerStats.shots :''}"></td>
+					<td th:text="${player.playerStats != null ? player.playerStats.shotsOnTarget :''}"></td>
+					<td th:text="${player.playerStats != null ? player.playerStats.saves :''}"></td>
+					
 					<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/deleteplayer/{id} (id=${player.id})}" class="btn btn-danger">Delete</a></td>
 					<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/editplayer/{id} (id=${player.id})}" class="btn btn-success">Edit</a></td>
 				</tr>
 			</tbody>
 		</table>
+		<a href="/playerlist" class="btn btn-primary">Go Back</a>
 	</div>
 </body>
 

@@ -3,9 +3,7 @@ package hh.sof03.footballStats.domain;
 import java.time.Year;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -16,10 +14,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")//Vältetään ifinite loop
+@JsonIgnoreProperties("players")
 public class Team {
 	
 	@Id
@@ -27,19 +26,27 @@ public class Team {
 	private Long id;
 	
 	@NotNull
-	@Size(min=2, max=30, message="Size must be between 2-30")
+	@Size(min=2, max=50, message="Size must be between 2-50")
 	private String name; 
 	
 	@NotNull
-	@Size(min=2, max=30, message="Size must be between 2-30")
+	@Size(min=2, max=50, message="Size must be between 2-50")
 	private String city;
+	
+	@NotNull
+	@Size(min=2, max=50, message="Size must be between 2-50")
+	private String stadium;
+	
+	@PositiveOrZero(message="Capacity cant be negative")
+	private int capacity; 
+	
+	private String logoUrl;
 	
 	@NotNull
 	@PastOrPresent(message="Founding year cannot be in the future")
 	private Year yearFounded;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team") //One team many players
-	@JsonIgnoreProperties({"playerStats", "bDay", "team"}) //Json datassa ei näytetä näitä
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
 	private List<Player> players;
 	
 	@OneToOne(mappedBy = "team")
@@ -47,10 +54,13 @@ public class Team {
 	private TeamStats teamStats;
 	
 	//Constructors
-	public Team(String name, String city, Year yearFounded) {
+	public Team(String name, String city, String stadium, int capacity, String logoUrl ,Year yearFounded) {
 		super();
 		this.name = name;
 		this.city = city;
+		this.stadium = stadium;
+		this.capacity = capacity;
+		this.logoUrl = logoUrl;
 		this.yearFounded = yearFounded;
 	}
 	
@@ -83,6 +93,30 @@ public class Team {
 		this.city = city;
 	}
 
+	public String getStadium() {
+		return stadium;
+	}
+
+	public void setStadium(String stadium) {
+		this.stadium = stadium;
+	}
+
+	public int getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
+	}
+
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
+	}
+
 	public Year getYearFounded() {
 		return yearFounded;
 	}
@@ -106,13 +140,11 @@ public class Team {
 	public void setTeamStats(TeamStats teamStats) {
 		this.teamStats = teamStats;
 	}
-
+	
 	//toString
 	@Override
 	public String toString() {
-		return "Team [id=" + id + ", name=" + name + ", city=" + city + ", yearFounded=" + yearFounded + "]";
-	}
-	
-	
-	
+		return "Team [id=" + id + ", name=" + name + ", city=" + city + ", stadium=" + stadium + ", capacity="
+				+ capacity + ", logoUrl=" + logoUrl + ", yearFounded=" + yearFounded + "]";
+	}	
 }

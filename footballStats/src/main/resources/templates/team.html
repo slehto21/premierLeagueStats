@@ -1,47 +1,65 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head>
-	<title>Football Statistics</title>
-	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
-	<style>
-		#mydiv {
-			padding-right: 10%;
-			padding-left: 5%;
-			padding-top: 2%;
-		}
-		label {
-			font-weight: bold;
-			margin-top: 10px;
-		}
+<title>Football Statistics</title>
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"
+	th:href="@{/css/bootstrap.min.css}" />
+<style>
+#mydiv {
+	padding-right: 10%;
+	padding-left: 5%;
+	padding-top: 2%;
+}
 
-		input,
-		select {
-			width: 100%;
-			margin-bottom: 10px;
-		}
+#mydiv img {
+    float: left;
+    margin-right: 20px;
+}
 
-		.btn-danger {
-			margin-right: 10px;
-		}
-	</style>
+#mydiv div {
+    float: left;
+}
+
+#mydiv::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+label {
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+input, select {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.btn-danger {
+	margin-right: 10px;
+}
+</style>
 </head>
 
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand">Football Statistics</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-			aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<a class="navbar-brand">Premier League</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarNav" aria-controls="navbarNav"
+			aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" href="/playerlist">Players</a>
+					<a class="nav-link" href="/teamlist">Teams</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/teamlist">Teams</a>
+					<a class="nav-link" href="/playerlist">Players</a>
 				</li>
 				<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
 					<a class="nav-link" href="/addteam">Add Team</a>
@@ -51,73 +69,111 @@
 				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item" sec:authorize="isAnonymous()">
-					<a th:href="@{/login}" class="btn btn-sm mx-2">Log in</a>
-				</li>
-				<li class="nav-item" sec:authorize="isAnonymous()">
-					<a th:href="@{/signup}" class="btn btn-sm mx-2">Sign-up</a>
-				</li>
+				<li class="nav-item" sec:authorize="isAnonymous()"><a
+					th:href="@{/login}" class="btn btn-sm mx-2">Log in</a></li>
+				<li class="nav-item" sec:authorize="isAnonymous()"><a
+					th:href="@{/signup}" class="btn btn-sm mx-2">Sign-up</a></li>
+				<li class="nav-item" sec:authorize="isAuthenticated()"><a><span
+						class="mr-2" sec:authentication="name"></span></a></li>
 				<li class="nav-item" sec:authorize="isAuthenticated()">
-					<a><span class="mr-2" sec:authentication="name"></span></a>
-				</li>
-				<li class="nav-item" sec:authorize="isAuthenticated()">
-					<form th:action="@{/logout}" method="post" class="form-inline my-2 my-lg-0">
-						<input type="submit" value="Sign Out" class="btn btn-sm btn-danger" />
+					<form th:action="@{/logout}" method="post"
+						class="form-inline my-2 my-lg-0">
+						<input type="submit" value="Sign Out"
+							class="btn btn-sm btn-danger" />
 					</form>
 				</li>
 			</ul>
 		</div>
 	</nav>
 
-<div id="mydiv">
-	<h1 th:text="${team.name}"></h1>
-	<h4 th:text="${team.city}"></h4>
-	<h4 th:text="'Founded: ' + ${team.yearFounded}"></h4>
+	<div id="mydiv">
+		<img th:src="${team.logoUrl}" style="width:150px;height:150px;">
+		<h1 th:text="${team.name}"></h1>
+		<h4>
+			<span th:text="'Location: '"></span> <span th:text="${team.city}"
+				style="font-weight: normal;"></span>
+		</h4>
+		<h4>
+			<span th:text="'Stadium: ' + ${team.stadium}"></span> <span
+				th:text="' (' + ${team.capacity} + ')'"
+				style="font-weight: normal; font-size: 85%;"></span>
+		</h4>
+		<h4>
+			<span th:text="'Founded: '"></span> <span
+				th:text="${team.yearFounded}" style="font-weight: normal;"></span>
+		</h4>
 
-	<table class="table table-striped">
-		<tbody>
-			<tr>
-				<th>Wins</th>
-				<th>Losses</th>
-				<th>Draws</th>
-			</tr>
-			<tr>
-				<td th:text="${team.teamStats != null ? team.teamStats.wins :''}"></td>
-				<td th:text="${team.teamStats != null ? team.teamStats.losses :''}"></td>
-				<td th:text="${team.teamStats != null ? team.teamStats.draws :''}"></td>
-				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/deleteteam/{id} (id=${team.id})}" class="btn btn-danger">Delete</a></td>
-				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/editteam/{id} (id=${team.id})}" class="btn btn-success">Edit</a></td>
-			</tr>
-		</tbody>
-	</table>
-	<dt>Goalkeepers</dt>
-	<dd>
-		<a th:each="player : ${players}" th:if="${player.position} == 'GK'"
-			th:href="@{/showplayer/{id}(id=${player.id})}" th:text="${player.firstName} + ' ' + ${player.lastName}"
-			style="color: black; display: block;"></a>
-	</dd>
+		<table class="table table-striped">
+			<tbody>
+				<tr>
+					<th>#</th>
+					<th>W</th>
+					<th>D</th>
+					<th>L</th>
+					<th>P</th>
+					<th>GF</th>
+					<th>GA</th>
+					<th>GD</th>
+					<th>Form</th>
+				</tr>
+				<tr>
+					<td th:text="${team.teamStats != null ? team.teamStats.rank :''}"></td>
+					<td th:text="${team.teamStats != null ? team.teamStats.wins :''}"></td>
+					<td th:text="${team.teamStats != null ? team.teamStats.losses :''}"></td>
+					<td th:text="${team.teamStats != null ? team.teamStats.draws :''}"></td>
+					<td
+						th:text="${team.teamStats != null ? team.teamStats.goalsFor :''}"></td>
+					<td
+						th:text="${team.teamStats != null ? team.teamStats.goalsAgainst :''}"></td>
+					<td
+						th:text="${team.teamStats != null ? team.teamStats.goalDiff :''}"></td>
+					<td th:text="${team.teamStats != null ? team.teamStats.points :''}"></td>
+					<td th:text="${team.teamStats != null ? team.teamStats.form :''}"></td>
+					<td sec:authorize="hasAuthority('ADMIN')"><a
+						th:href="@{/deleteteam/{id} (id=${team.id})}"
+						class="btn btn-danger">Delete</a></td>
+					<td sec:authorize="hasAuthority('ADMIN')"><a
+						th:href="@{/editteam/{id} (id=${team.id})}"
+						class="btn btn-success">Edit</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<dl>
+			<dt>Goalkeepers</dt>
+			<dd>
+				<a th:each="player : ${players}"
+					th:if="${player.position} == 'Goalkeeper'"
+					th:href="@{/showplayer/{id}(id=${player.id})}"
+					th:text="${player.name}" style="color: black; display: block;"></a>
+			</dd>
 
-	<dt>Defenders</dt>
-	<dd>
-		<a th:each="player : ${players}" th:if="${player.position} == 'DEF'"
-			th:href="@{/showplayer/{id}(id=${player.id})}" th:text="${player.firstName} + ' ' + ${player.lastName}"
-			style="color: black; display: block;"></a>
-	</dd>
+			<dt>Defenders</dt>
+			<dd>
+				<a th:each="player : ${players}"
+					th:if="${player.position} == 'Defender'"
+					th:href="@{/showplayer/{id}(id=${player.id})}"
+					th:text="${player.name}" style="color: black; display: block;"></a>
+			</dd>
 
-	<dt>Midfielders</dt>
-	<dd>
-		<a th:each="player : ${players}" th:if="${player.position} == 'MID'"
-			th:href="@{/showplayer/{id}(id=${player.id})}" th:text="${player.firstName} + ' ' + ${player.lastName}"
-			style="color: black; display: block;"></a>
-	</dd>
+			<dt>Midfielders</dt>
+			<dd>
+				<a th:each="player : ${players}"
+					th:if="${player.position} == 'Midfielder'"
+					th:href="@{/showplayer/{id}(id=${player.id})}"
+					th:text="${player.name}" style="color: black; display: block;"></a>
+			</dd>
 
-	<dt>Attackers</dt>
-	<dd>
-		<a th:each="player : ${players}" th:if="${player.position} == 'ATT'"
-			th:href="@{/showplayer/{id}(id=${player.id})}" th:text="${player.firstName} + ' ' + ${player.lastName}"
-			style="color: black; display: block;"></a>
-	</dd>
+			<dt>Attackers</dt>
+			<dd>
+				<a th:each="player : ${players}"
+					th:if="${player.position} == 'Attacker'"
+					th:href="@{/showplayer/{id}(id=${player.id})}"
+					th:text="${player.name}" style="color: black; display: block;"></a>
+			</dd>
+		</dl>
+		<a href="/teamlist" class="btn btn-primary">Go Back</a>
 	</div>
+
 </body>
 
 </html>

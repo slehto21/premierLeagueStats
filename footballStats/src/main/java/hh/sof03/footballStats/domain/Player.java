@@ -1,12 +1,11 @@
 package hh.sof03.footballStats.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,35 +14,44 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")//Vältetään ifinite loop
 public class Player {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NotNull
+	@Size(min=2, max=30, message="Size must be between 2-30")
+	private String name;
+	
 	@Size(min=2, max=30, message="Size must be between 2-30")
 	private String firstName;
 	
-	@NotNull
 	@Size(min=2, max=30, message="Size must be between 2-30")
 	private String lastName;
+	
+	private int age;
+	
+	private String nationality;
+	
+	private String height;
+
+	private String weight;
+	
+	private String playerPhoto;
 	
 	private String position;
 	
 	@Past(message="Birthday must be in the past")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date bDay;
+	private LocalDate bDay;
 	
-	@ManyToOne //Many players one team
-	@JsonIgnoreProperties({"teamStats", "city", "yearFounded", "players"}) //Json dataan ei tule näitä
+	@ManyToOne
+	@JsonIgnoreProperties({"teamStats", "city", "yearFounded", "logoUrl", "stadium", "capacity", "players"}) 
 	@JoinColumn(name="teamId")
 	private Team team;
 	
@@ -52,11 +60,18 @@ public class Player {
 	private PlayerStats playerStats;
 	
 	//Constructors
-	public Player(String firstName, String lastName, String position, Date bDay, Team team) {
+	public Player(String name, String firstName, String lastName, int age, String position, String nationality,
+			 String height, String weight, String playerPhoto, LocalDate bDay, Team team) {
 		super();
+		this.name = name;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.age = age;
 		this.position = position;
+		this.nationality = nationality;
+		this.height = height;
+		this.weight = weight;
+		this.playerPhoto = playerPhoto;
 		this.bDay = bDay;
 		this.team = team;
 	}
@@ -73,6 +88,14 @@ public class Player {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getFirstName() {
@@ -99,14 +122,54 @@ public class Player {
 		this.position = position;
 	}
 
-	public Date getbDay() {
+	public LocalDate getbDay() {
 		return bDay;
 	}
 
-	public void setbDay(Date bDay) {
+	public void setbDay(LocalDate bDay) {
 		this.bDay = bDay;
 	}
 	
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String getNationality() {
+		return nationality;
+	}
+
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
+	}
+
+	public String getHeight() {
+		return height;
+	}
+
+	public void setHeight(String height) {
+		this.height = height;
+	}
+
+	public String getWeight() {
+		return weight;
+	}
+
+	public void setWeight(String weight) {
+		this.weight = weight;
+	}
+
+	public String getPlayerPhoto() {
+		return playerPhoto;
+	}
+
+	public void setPlayerPhoto(String playerPhoto) {
+		this.playerPhoto = playerPhoto;
+	}
+
 	public Team getTeam() {
 		return team;
 	}
@@ -122,21 +185,23 @@ public class Player {
 	public void setPlayerStats(PlayerStats playerStats) {
 		this.playerStats = playerStats;
 	}
-
+	
+	
 	//toString
 	@Override
 	public String toString() {
 		if(this.getTeam() != null) {
-			return "Player [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", postion=" + position
-					+ ", bDay=" + bDay + ", team=" + this.getTeam() + "]";
+		return "Player [id=" + id + ", name=" + name + ", firstName=" + firstName + ", lastName=" + lastName + ", age="
+				+ age + ", nationality=" + nationality + ", height=" + height + ", weight=" + weight + ", playerPhoto="
+				+ playerPhoto + ", position=" + position + ", bDay=" + bDay + ", team=" + team + "]";
 		}
 		else {
-		return "Player [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", postion=" + position
-				+ ", bDay=" + bDay + "]";
+			return "Player [id=" + id + ", name=" + name + ", firstName=" + firstName + ", lastName=" + lastName + ", age="
+					+ age + ", nationality=" + nationality + ", height=" + height + ", weight=" + weight + ", playerPhoto="
+					+ playerPhoto + ", position=" + position + ", bDay=" + bDay + "]";
 		}
 	}
-	
-	
+
 	
 	
 	
