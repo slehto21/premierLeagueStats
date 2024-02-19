@@ -16,4 +16,4 @@ Player stats sorted by goals
 Player page
 <img width="949" alt="Haaland" src="https://github.com/slehto21/premierLeagueStats/assets/103950934/58a4e754-f3ea-424a-b0f2-8e9e7a38f065">
 
-In addtion to user features admins can add new players and teams, as well as delete and edit existing ones.
+In addition to user features admins can add new players and teams, as well as delete and edit existing ones.
