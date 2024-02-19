@@ -6,9 +6,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -209,10 +211,13 @@ public class PlayerApiCall {
 					    }
 					    ratingDouble = ratingDouble / ratings.length;
 					} else {
-					    ratingDouble = Double.parseDouble(rating);
+					    ratingDouble = Double.parseDouble(rating); 
 					}
-					DecimalFormat df = new DecimalFormat("#,##.00");
-					ratingDouble = Double.parseDouble(df.format(ratingDouble));
+					DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+					symbols.setDecimalSeparator('.');
+					DecimalFormat df = new DecimalFormat("#.##", symbols);
+					String roundedRating = df.format(ratingDouble);
+					ratingDouble = Double.parseDouble(roundedRating);
 					PlayerStats playerStats = new PlayerStats(goals, assists, matches, minutes, ratingDouble, shots,
 							shotsOnTarget, saves, yellows, reds, player);
 					logger.info("Stats: " + playerStats);
