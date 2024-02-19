@@ -3,6 +3,7 @@ Premier League Statistics Application
 This project is a Java and Thymeleaf-based web application that provides statistical data for Premier League teams and players. MariaDB is used as the database to store and manage data.
 
 User Features: 
+
 League table
 <img width="940" alt="league table" src="https://github.com/slehto21/premierLeagueStats/assets/103950934/23e897eb-5b9e-4aff-bb43-2dbb225a47df">
 
